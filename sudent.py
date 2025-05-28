@@ -9,24 +9,33 @@ class Student:
     
     def __init__(self):
         print(" New student!")
-        self.name = input("What is your name?")
-        self.age = int(input("What is your age?"))
-        self.country = input("Where do you live?")
-        self.s_class = "7H1"
-        self.teacher = "Mr Heale"
-        self.house = "Newton"
+        self.name = input("What is your name? ")
+        self.age = int(input("What is your age? "))
+        self.country = input("Where do you live? ")
 
     def show_details(self):
-        print("Hello "+ self.name)
+        print("\nHello "+ self.name)
         print(f"Your age is {self.age}")
-        print(f"Aahil lives in {self.country}")
+        print(f"{self.name} lives in {self.country}")
         print("Your class is "+ self.s_class)
         print("Your teacher is "+ self.teacher)
         print("Your house is "+ self.house)
-        print("*Have Fun!")
+        print("*Have Fun!\n")
+
+    
+    def change_details(self):
+        print("Change details:")
+        self.name = input("What is your name? ")
+        student1.show_details()
+
+    
     
 student1 = Student()
 student1.show_details()
+#student2 = Student()
+#student2.show_details()
+student1.change_details()
+
 
 
         
