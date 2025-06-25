@@ -44,7 +44,7 @@ def start_game():
 
         pressed_key = pygame.key.get_pressed()
         player.update(pressed_key)
-        screen.blit(pygame.image.load("space.png"))
+        screen.blit(pygame.image.load("space.png"),(0,0))
 
         sprites.draw(screen)
         pygame.display.update()
