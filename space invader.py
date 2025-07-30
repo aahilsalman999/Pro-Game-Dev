@@ -34,7 +34,7 @@ RED_HIT = pygame.USEREVENT + 1
 YELLOW_SHIP = pygame.image.load(os.path.join("assets","rocket1.png"))
 YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(YELLOW_SHIP,
                                                                   (SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)),90)
-RED_SHIP = pygame.image.load(os.path.join("assests","roket2.png"))
+RED_SHIP = pygame.image.load(os.path.join("assets","rocket2.png"))
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(RED_SHIP,
                                                                (SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)),90)
 SPACE = pygame.transform.scale(pygame.image.load(os.path.join("assets","space1.png")),(WIDTH,HEIGHT))
@@ -44,13 +44,13 @@ def draw_window(red,yellow,red_bullet,yellow_bullet,red_health,yellow_health):
     pygame.draw.rect(wind,BLUE,BORDER)
 
     red_health_text = HEALTH_FONT.render("Health: "+str(red_health),1,RED)
-    yellow_health_text = HEALTH_FONT.render("Health: "+str(yellow_health,1,YELLOW))
+    yellow_health_text = HEALTH_FONT.render("Health: "+str(yellow_health),1,YELLOW)
     
     wind.blit(red_health_text , (WIDTH - red_health_text.get_width() - 10 , 10))
     wind.blit(yellow_health_text , (10 , 10))
 
-    wind.blit(YELLOW_SPACESHIP,yellow.x , yellow.y)
-    wind.blit(RED_SPACESHIP,red.x , red.y)
+    wind.blit(YELLOW_SPACESHIP,(yellow.x , yellow.y))
+    wind.blit(RED_SPACESHIP,(red.x , red.y))
     
     for bullet in red_bullet:
         pygame.draw.rect(wind,RED,bullet)
@@ -70,13 +70,13 @@ def yellow_movement(key_pressed,yellow):
         yellow.y += VEL
 
 def red_movement(key_pressed,red):
-    if key_pressed[pygame.K_a] and red.x - VEL > 0:
+    if key_pressed[pygame.K_LEFT] and red.x - VEL > 0:
         red.x -= VEL
-    if key_pressed[pygame.K_d] and red.x + VEL + red.width < BORDER.x:
+    if key_pressed[pygame.K_RIGHT] and red.x + VEL + red.width < BORDER.x:
         red.x += VEL
-    if key_pressed[pygame.K_w] and red.y - VEL > 0:
+    if key_pressed[pygame.K_UP] and red.y - VEL > 0:
         red.y -= VEL
-    if key_pressed[pygame.K_s] and red.y + VEL + red.height < HEIGHT - 15:
+    if key_pressed[pygame.K_DOWN] and red.y + VEL + red.height < HEIGHT - 15:
         red.y += VEL
 
 def handle_bullet(yellow_bullet,red_bullet,yellow,red):
@@ -101,15 +101,65 @@ def draw_winner(text):
     wind.blit(draw_text,(WIDTH/2 - draw_text.get_width()/2 , HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
     pygame.time.delay(5000)
+
+def main():
+    red = pygame.Rect(800,300 , SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)
+    yellow = pygame.Rect(200,300 , SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)
     
+    red_bullets = []
+    yellow_bullets = []
 
+    red_health = 10
+    yellow_health = 10
+
+    clock = pygame.time.Clock()
+    run = True
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
+                    bullet = pygame.Rect(yellow.x + yellow.width , yellow.y + yellow.height//2 - 2 , 10,5)
+                    yellow_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
+
+                elif event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
+                    bullet = pygame.Rect(red.x , red.y + red.height//2 - 2 , 10,5)
+                    red_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
+
+            if event.type == RED_HIT:
+                red_health -= 1
+                BULLET_HIT_SOUND.play()
+
+            elif event.type == YELLOW_HIT:
+                yellow_health -= 1
+                BULLET_HIT_SOUND.play()
+            
+        winner_text = ""
+        if red_health <= 0:
+            winner_text = "Yellow wins!"
+
+        elif yellow_health <= 0:
+            winner_text = "Red wins!"
+
+        elif winner_text != "":
+            draw_winner(winner_text)
+            break
         
+        key_pressed = pygame.key.get_pressed()
+        yellow_movement(key_pressed , yellow)
+        red_movement(key_pressed , red)
+        handle_bullet(yellow_bullets , red_bullets , yellow , red)
+        draw_window(red , yellow , red_bullets , yellow_bullets , red_health , yellow_health)
 
-        
+main()
 
-
-
-
+if __name__ == "__main__":
+    main()
 
 
 
