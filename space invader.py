@@ -28,7 +28,7 @@ SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT = 120,100
 
 #custom event identifier triggered when a ship is hit
 YELLOW_HIT = pygame.USEREVENT + 1
-RED_HIT = pygame.USEREVENT + 1
+RED_HIT = pygame.USEREVENT + 2
 
 #load and transform images
 YELLOW_SHIP = pygame.image.load(os.path.join("assets","rocket1.png"))
