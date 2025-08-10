@@ -36,7 +36,7 @@ YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(YELLOW_SHIP,
                                                                   (SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)),90)
 RED_SHIP = pygame.image.load(os.path.join("assets","rocket2.png"))
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(RED_SHIP,
-                                                               (SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)),90)
+                                                               (SPACE_SHIP_WIDTH , SPACE_SHIP_HEIGHT)),270)
 SPACE = pygame.transform.scale(pygame.image.load(os.path.join("assets","space1.png")),(WIDTH,HEIGHT))
 
 def draw_window(red,yellow,red_bullet,yellow_bullet,red_health,yellow_health):
@@ -54,6 +54,7 @@ def draw_window(red,yellow,red_bullet,yellow_bullet,red_health,yellow_health):
     
     for bullet in red_bullet:
         pygame.draw.rect(wind,RED,bullet)
+
     for bullet in yellow_bullet:
         pygame.draw.rect(wind,YELLOW,bullet)
     
@@ -70,9 +71,9 @@ def yellow_movement(key_pressed,yellow):
         yellow.y += VEL
 
 def red_movement(key_pressed,red):
-    if key_pressed[pygame.K_LEFT] and red.x - VEL > 0:
+    if key_pressed[pygame.K_LEFT] and red.x - VEL > BORDER.x + BORDER.width:
         red.x -= VEL
-    if key_pressed[pygame.K_RIGHT] and red.x + VEL + red.width < BORDER.x:
+    if key_pressed[pygame.K_RIGHT] and red.x + VEL + red.width < WIDTH:
         red.x += VEL
     if key_pressed[pygame.K_UP] and red.y - VEL > 0:
         red.y -= VEL
@@ -135,7 +136,7 @@ def main():
                 red_health -= 1
                 BULLET_HIT_SOUND.play()
 
-            elif event.type == YELLOW_HIT:
+            if event.type == YELLOW_HIT:
                 yellow_health -= 1
                 BULLET_HIT_SOUND.play()
             
@@ -143,10 +144,10 @@ def main():
         if red_health <= 0:
             winner_text = "Yellow wins!"
 
-        elif yellow_health <= 0:
+        if yellow_health <= 0:
             winner_text = "Red wins!"
 
-        elif winner_text != "":
+        if winner_text != "":
             draw_winner(winner_text)
             break
         
