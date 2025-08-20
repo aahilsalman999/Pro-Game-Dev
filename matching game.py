@@ -65,12 +65,11 @@ correct_pair = {
 
 first_click = None
 running = True
-pos2 = None
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running == False
+            running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             pygame.draw.circle(screen,(255,255,255),pos,10,0)
@@ -83,47 +82,47 @@ while running:
                 pygame.draw.circle(screen,(255,255,255),pos2,10,0)
 
             #which image and text are clicked
-            choosen_image = None
-            choosen_text = None
-            
-            #check if first_click is image
-            for key,(x,y) in image_positions.items():
-                image_rect = pygame.Rect(x,y,100,100)
-                if image_rect.collidepoint(first_click):
-                    choosen_image = key
-
-            for key,(x,y) in text_positions.items():
-                text_rect = pygame.Rect(x,y,300,50)
-                if text_rect.collidepoint(pos2):
-                    chosen_text = key
-
-            #if first click is on text
-            for key,(x,y) in image_positions.items():
-                image_rect = pygame.Rect(x,y,100,100)
-                if image_rect.collidepoint(pos2):
-                    choosen_image = key
-
-            for key,(x,y) in text_positions.items():
-                text_rect = pygame.Rect(x,y,300,50)
-                if text_rect.collidepoint(first_click):
-                    chosen_text = key
-            
-            #default colours
-            default_colour = (255,255,255)
-            if choosen_image and choosen_text:
-                if correct_pair[choosen_image] == choosen_text:
-                    default_colour = (0,255,0)
-            
-            pygame.draw.line(screen,default_colour,first_click,pos2,5)
-            pygame.display.update()
-            first_click = None
-
-
-
-
+                choosen_image = None
+                choosen_text = None
                 
-                
-                       
+                #check if first_click is image
+                for key, (x,y) in image_positions.items():
+                    rect = pygame.Rect(x,y,100,100)
+                    if rect.collidepoint(first_click):
+                        choosen_image = key
 
-        
+                for key, (x,y) in text_positions.items():
+                    rect = pygame.Rect(x,y,200,50)
+                    if rect.collidepoint(pos2):
+                        choosen_text = key
+
+                #if first click is on text
+                for key, (x,y) in image_positions.items():
+                    rect = pygame.Rect(x,y,100,100)
+                    if rect.collidepoint(pos2):
+                        choosen_image = key
+
+                for key, (x,y) in text_positions.items():
+                    rect = pygame.Rect(x,y,200,50)
+                    if rect.collidepoint(first_click):
+                        choosen_text = key
+                
+                #default colours
+                default_colour = (255,255,255)
+                if choosen_image and choosen_text:
+                    if correct_pair[choosen_image] == choosen_text:
+                        default_colour = (0,255,0)
+                
+                pygame.draw.line(screen,default_colour,first_click,pos2,5)
+                pygame.display.update()
+                first_click = None
+
+
+
+
+                    
+                    
+                        
+
+            
 
