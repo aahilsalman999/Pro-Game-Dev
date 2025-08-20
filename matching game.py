@@ -2,8 +2,8 @@ import pygame
 pygame.init()
 WIDTH = 700
 HEIGHT = 700
-screen = pygame.display.set_mode(WIDTH,HEIGHT)
-screen.fill((0,0,0))
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
+screen.fill((210,180,140))
 pygame.display.update()
 
 #load images
@@ -14,42 +14,42 @@ subway_surfers = pygame.image.load("subway surfers.png")
 temple_run = pygame.image.load("temple run.png")
 
 #blit images
-screen.blit(ludo,(200,50))
-screen.blit(mario,(200,75))
-screen.blit(hill,(200,100))
-screen.blit(subway_surfers,(200,125))
-screen.blit(temple_run,(200,150))
+screen.blit(ludo,(100,50))
+screen.blit(mario,(100,175))
+screen.blit(hill,(100,300))
+screen.blit(subway_surfers,(100,425))
+screen.blit(temple_run,(100,550))
 
 #text setup
 font = pygame.font.SysFont("comicSansms",30)
-text1 = font.render("hill climbing",True,(0,0,0))
-text2 = font.render("temple run",True,(0,0,0))
-text3 = font.render("ludo",True,(0,0,0))
-text4 = font.render("mario",True,(0,0,0))
-text5 = font.render("subway surfers",True,(0,0,0))
+text1 = font.render("Hill Climbing",True,(0,0,0))
+text2 = font.render("Temple Run",True,(0,0,0))
+text3 = font.render("Ludo",True,(0,0,0))
+text4 = font.render("Mario",True,(0,0,0))
+text5 = font.render("Subway Surfers",True,(0,0,0))
 
 #blit text
-screen.blit(text1,(500,50))
-screen.blit(text2,(500,75))
-screen.blit(text3,(500,100))
-screen.blit(text4,(500,125))
-screen.blit(text5,(500,150))
+screen.blit(text1,(400,65))
+screen.blit(text2,(400,190))
+screen.blit(text3,(400,315))
+screen.blit(text4,(400,440))
+screen.blit(text5,(400,565))
 
 #dictionary for image and text positions
 image_positions = {
-    "ludo" : (200,50),
-    "mario" : (200,75),
-    "hill" : (200,100),
-    "subway_surfers" : (200,125),
-    "temple_run" : (200,150)
+    "ludo" : (100,50),
+    "mario" : (100,175),
+    "hill" : (100,300),
+    "subway_surfers" : (100,425),
+    "temple_run" : (100,550)
 }
 
 text_positions = {
-    "text1" : (500,50),
-    "text2" : (500,75),
-    "text3" : (500,100),
-    "text4" : (500,125),
-    "text5" : (500,150)
+    "text1" : (400,65),
+    "text2" : (400,190),
+    "text3" : (400,315),
+    "text4" : (400,440),
+    "text5" : (400,565)
 }
 
 pygame.display.update()
@@ -65,6 +65,7 @@ correct_pair = {
 
 first_click = None
 running = True
+pos2 = None
 
 while running:
     for event in pygame.event.get():
@@ -72,14 +73,56 @@ while running:
             running == False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-            pygame.draw.circle(screen,(128,0,128),pos,10,0)
+            pygame.draw.circle(screen,(255,255,255),pos,10,0)
             pygame.display.update()
 
             if not first_click:
                 first_click = pos
             else:
-                pos2 = pos
-                pygame.draw.circle(screen,(128,0,128),pos,10,0)
+                pos2 = pos 
+                pygame.draw.circle(screen,(255,255,255),pos2,10,0)
+
+            #which image and text are clicked
+            choosen_image = None
+            choosen_text = None
+            
+            #check if first_click is image
+            for key,(x,y) in image_positions.items():
+                image_rect = pygame.Rect(x,y,100,100)
+                if image_rect.collidepoint(first_click):
+                    choosen_image = key
+
+            for key,(x,y) in text_positions.items():
+                text_rect = pygame.Rect(x,y,300,50)
+                if text_rect.collidepoint(pos2):
+                    chosen_text = key
+
+            #if first click is on text
+            for key,(x,y) in image_positions.items():
+                image_rect = pygame.Rect(x,y,100,100)
+                if image_rect.collidepoint(pos2):
+                    choosen_image = key
+
+            for key,(x,y) in text_positions.items():
+                text_rect = pygame.Rect(x,y,300,50)
+                if text_rect.collidepoint(first_click):
+                    chosen_text = key
+            
+            #default colours
+            default_colour = (255,255,255)
+            if choosen_image and choosen_text:
+                if correct_pair[choosen_image] == choosen_text:
+                    default_colour = (0,255,0)
+            
+            pygame.draw.line(screen,default_colour,first_click,pos2,5)
+            pygame.display.update()
+            first_click = None
+
+
+
+
+                
+                
                        
 
         
